@@ -4,6 +4,10 @@ interface CalendarSource {
 
     fun initCalendar()
 
+    fun setYear(year: Int)
+    fun setMonth(month: Int)
+    fun setDay(day: Int)
+
     fun getYear(): Int
     fun getMonth(): Int
     fun getDay(): Int
@@ -18,10 +22,7 @@ interface CalendarSource {
     fun onSunday(today: String): Boolean
     fun onSaturday(today: String): Boolean
 
-    fun setYear(year: Int)
-    fun setMonth(month: Int)
-    fun setDay(day: Int)
-
     fun getDayList(): List<CalendarEntity>
     fun createBlankDayList(): List<CalendarEntity>
+
 }
