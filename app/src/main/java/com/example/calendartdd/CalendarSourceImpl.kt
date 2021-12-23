@@ -5,7 +5,7 @@ import java.util.*
 
 class CalendarSourceImpl : CalendarSource {
 
-    private lateinit var calendar: Calendar
+    lateinit var calendar: Calendar
 
     override fun initCalendar() {
         calendar = Calendar.getInstance()
