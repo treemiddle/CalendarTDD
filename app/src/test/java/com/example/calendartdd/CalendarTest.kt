@@ -1,5 +1,6 @@
 package com.example.calendartdd
 
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -136,6 +137,112 @@ class CalendarTest {
             calendarSourceImpl.getCurrentDate(),
             "${currentYear}.${currentMonth}.${currentDay}"
         )
+    }
+
+    @Test
+    fun `14_입력된 날짜가 오늘과 일치하지 않으면 onToday()는 false를 반환한다`() {
+        Assert.assertEquals(calendarSourceImpl.onToday("1991.12.27"), false)
+    }
+
+    @Test
+    fun `15_입력된 날짜가 일요일이면 onSunday()는 false를 반환한다`() {
+        Assert.assertEquals(calendarSourceImpl.onSunday("2021.12.25"), false)
+    }
+
+    @Test
+    fun `16_입력된 날짜가 토요일이면 onSaturday()는 true를 반환한다`() {
+        Assert.assertEquals(calendarSourceImpl.onSaturday("2021.12.26"), true)
+    }
+
+    @Test
+    fun `17_입력된 날짜가 토요일이 아니면 onSaturday()는 false를 반환한다`() {
+        Assert.assertEquals(calendarSourceImpl.onSaturday("2021.12.27"), false)
+    }
+
+    @Test
+    fun `18_getFirstDayOfWeek()는 2021년 8월의 1일 요일을 1로 반환한다`() {
+        val firstDayOfWeek = calendarSourceImpl.getFirstDayOfWeek()
+
+        Assert.assertEquals(firstDayOfWeek, 1)
+    }
+
+    @Test
+    fun `19_getFirstDayOfWeek()는 2021년 7월의 1일 요일을 5로 반환한다`() {
+        calendarSourceImpl.run {
+            setYear(2021)
+            setMonth(7)
+            setDay(1)
+        }
+
+        val firstDayOfWeek = calendarSourceImpl.getFirstDayOfWeek()
+
+        Assert.assertEquals(firstDayOfWeek, 5)
+    }
+
+    @Test
+    fun `20_getFirstDayOfWeek()는 2020년 12월의 1일 요일을 3으로 반환한다`() {
+        calendarSourceImpl.run {
+            setYear(2020)
+            setMonth(12)
+            setDay(1)
+        }
+
+        val firstDayOfWeek = calendarSourceImpl.getFirstDayOfWeek()
+
+        Assert.assertEquals(firstDayOfWeek, 3)
+    }
+
+    @Test
+    fun `21_createBlankDayList()는 현재 월 시작요일 전 빈값에 대한 BALNK 리스트를 올바르게 ADD한다(카운트)`() {
+        val items = calendarSourceImpl.createBlankDayList()
+
+        Assert.assertEquals(items.count(), 0)
+    }
+
+    @Test
+    fun `22_createBlankDayList()는 2021sus 7월 시작요일 전 빈값에 대한 BLANK 리스트를 올바르게 ADD한다(카운트)`() {
+        calendarSourceImpl.calendar.set(Calendar.MONTH, 6)
+
+        val items = calendarSourceImpl.createBlankDayList()
+
+        Assert.assertEquals(items.count(), 4)
+    }
+
+    @Test
+    fun `23_getDayList()는 현재 월 달력의 0번째 cell부터 마지막 날까지의 리스트 갯수를 올바르게 생성한다`() {
+        val itemCount = calendarSourceImpl.getDayList().size
+
+        Assert.assertEquals(itemCount, 31)
+    }
+
+    @Test
+    fun `24_getDayList()는 2021년 7월 달력의 0번째 cell부터 마지막 날까지의 리스트 개수를 올바르게 생성한다`() {
+        calendarSourceImpl.setMonth(7)
+
+        val itemCount = calendarSourceImpl.getDayList().size
+
+        Assert.assertEquals(itemCount, 35)
+    }
+
+    @Test
+    fun `25_getDayList()의 마지막 요소의 value는 현재 월의 마지막 day값과 일치한다`() {
+        val lasyDay = Calendar.getInstance().getActualMaximum(Calendar.DATE)
+
+        Assert.assertEquals(calendarSourceImpl.getDayList().last().value, lasyDay)
+    }
+
+    @Test
+    fun `26_getDayList()의 마지막 요소의 value는 2021년 7월의 마지막 day값과 일치한다`() {
+        calendarSourceImpl.setMonth(7)
+
+        val lastDay = Calendar.getInstance().getActualMaximum(Calendar.DATE)
+
+        Assert.assertEquals(calendarSourceImpl.getDayList().last().value, lastDay)
+    }
+
+    @After
+    fun finish() {
+
     }
 
 }
